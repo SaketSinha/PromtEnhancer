@@ -43,7 +43,20 @@ streamlit run app.py
 
 The app will open at `http://localhost:8501`
 
-## Deployment on Streamlit Community Cloud
+## Deployment on Railway
+
+1. Push your code to GitHub
+2. Go to [Railway.app](https://railway.app)
+3. Click "New Project" → "Deploy from GitHub repo"
+4. Select your PromtEnhancer repository
+5. Railway will auto-detect and install dependencies from `requirements.txt`
+6. Go to **Variables** and add:
+   ```
+   OPENAI_API_KEY=sk-your-actual-key
+   ```
+7. Deploy! Your app will be live at the provided Railway URL
+
+## Alternative: Streamlit Community Cloud
 
 1. Push your code to GitHub (excluding `.env` file - it's in `.gitignore`)
 2. Go to [Streamlit Cloud](https://streamlit.io/cloud)
