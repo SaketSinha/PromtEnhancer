@@ -1,5 +1,9 @@
 import streamlit as st
 from openai import OpenAI
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # --------------------------------------------------
@@ -24,15 +28,11 @@ st.write(
 # API key
 # --------------------------------------------------
 
-api_key = st.text_input(
-    "OpenAI API Key",
-    type="password",
-    placeholder="sk-..."
-)
+api_key = os.getenv("OPENAI_API_KEY")
 
-st.caption(
-    "Your API key is used only to make the API request during this session."
-)
+if not api_key:
+    st.error("OpenAI API key not found. Please set OPENAI_API_KEY in your .env file or environment.")
+    st.stop()
 
 
 # --------------------------------------------------
@@ -66,10 +66,7 @@ task = st.text_area(
 
 if st.button("Enhance Prompt", type="primary"):
 
-    if not api_key:
-        st.error("Please enter your OpenAI API key.")
-
-    elif not role or not context or not task:
+    if not role or not context or not task:
         st.error("Please complete Role, Context, and Task.")
 
     else:
@@ -120,13 +117,15 @@ Return only the improved prompt. Do not explain what you changed.
 
             with st.spinner("Improving your prompt..."):
 
-                response = client.responses.create(
-                    model="gpt-5-mini",
-                    instructions=instructions,
-                    input=user_prompt
+                response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[
+                        {"role": "system", "content": instructions},
+                        {"role": "user", "content": user_prompt}
+                    ]
                 )
 
-                enhanced_prompt = response.output_text.strip()
+                enhanced_prompt = response.choices[0].message.content.strip()
 
             # Extra safeguard:
             # make sure the required clarification instruction
