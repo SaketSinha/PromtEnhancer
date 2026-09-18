@@ -1,7 +1,8 @@
 {
   "$schema": "https://railway.app/schema.json",
   "build": {
-    "builder": "HEROKU_BUILDPACKS"
+    "builder": "HEROKU_BUILDPACKS",
+    "buildCommand": "pip install -r requirements.txt"
   },
   "deploy": {
     "startCommand": "streamlit run app.py --server.port=$PORT --server.address=0.0.0.0"
